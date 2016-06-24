@@ -13,7 +13,7 @@ Checkout or clone the repository. Build the repository with Maven. A simple `mvn
 
 ## Configuration
 
-Edit your `conf/authn/general-authn.xml` and add the linotp authentication method there. Change the <CONTEXT_CLASS> to something useful, that will reflect your needs. For example: https://<your-org>/auth/2fa. Service Providers will have to use this string, if they want to use step-up authentication.
+Edit your `conf/authn/general-authn.xml` and add the linotp authentication method there. Change the <CONTEXT_CLASS> to something useful, that will reflect your needs. For example: `https://<your-org>/auth/2fa`. Service Providers will have to use this string, if they want to use step-up authentication.
 
 ```xml
     <util:list id="shibboleth.AvailableAuthenticationFlows">
