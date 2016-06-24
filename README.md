@@ -55,3 +55,4 @@ idp.authn.linotpCheckcert = <true: check DN of certificate match>
 idp.authn.linotpCreateEmailToken = <true: create an e-mail token, if user has no tokens yet (for testing)>
 ```
 
+You will most probably need to customize the `linotp.vm` view to reflect your IDP design.
