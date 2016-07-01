@@ -56,3 +56,7 @@ idp.authn.linotpCreateEmailToken = <true: create an e-mail token, if user has no
 ```
 
 You will most probably need to customize the `linotp.vm` view to reflect your IDP design.
+
+## Example Webpage
+
+You can find an example for using the Two factor method with a standard Shibboleth SP in the folder example-webpage. See [[wiki/ExampleWebpage]] for details.
