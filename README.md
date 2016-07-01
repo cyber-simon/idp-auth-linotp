@@ -59,4 +59,4 @@ You will most probably need to customize the `linotp.vm` view to reflect your ID
 
 ## Example Webpage
 
-You can find an example for using the Two factor method with a standard Shibboleth SP in the folder example-webpage. See [[wiki/ExampleWebpage]] for details.
+You can find an example for using the Two factor method with a standard Shibboleth SP in the folder example-webpage. See [ExamplePage wiki](https://github.com/cyber-simon/idp-auth-linotp/wiki/ExampleWebpage) for details.
