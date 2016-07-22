@@ -4,22 +4,6 @@
       parent="authn.abstract, authn/conditions">
 
     <var name="currentTime" class="java.util.Date" />
-    
-    <decision-state id="checkFirstLogin">
-    	<if test="(currentTime.getTime() - opensamlProfileRequestContext.getSubcontext(T(net.shibboleth.idp.session.context.SessionContext)).getIdPSession().getCreationInstant()) > 120000"
-            then="checkForceAuth"
-            else="linotp" />   
-    </decision-state>
-    <decision-state id="checkForceAuth">
-        <if test="opensamlProfileRequestContext.getSubcontext(T(net.shibboleth.idp.authn.context.AuthenticationContext)).isForceAuthn()"
-            then="CallPasswordFlow"
-            else="linotp" />
-    </decision-state>
-    
-    <subflow-state id="CallPasswordFlow" subflow="authn/Password">
-        <input name="calledAsSubflow" value="true"/>
-        <transition on="proceed" to="linotp"/>
-    </subflow-state>
 
     <view-state id="linotp" view="linotp">
         <on-entry>
