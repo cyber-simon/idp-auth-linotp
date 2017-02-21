@@ -18,7 +18,7 @@ import org.opensaml.saml.common.SAMLObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class TokenValidator extends AbstractValidationAction<SAMLObject, SAMLObject> {
+public class TokenValidator extends AbstractValidationAction {
 
 	private final Logger logger = LoggerFactory.getLogger(TokenValidator.class);
 	
@@ -31,7 +31,7 @@ public class TokenValidator extends AbstractValidationAction<SAMLObject, SAMLObj
 	
     @Override
     protected boolean doPreExecute(
-            @Nonnull ProfileRequestContext<SAMLObject, SAMLObject> profileRequestContext,
+            @Nonnull ProfileRequestContext profileRequestContext,
             @Nonnull AuthenticationContext authenticationContext) {
         if (!super.doPreExecute(profileRequestContext, authenticationContext)) {
             return false;
@@ -74,7 +74,7 @@ public class TokenValidator extends AbstractValidationAction<SAMLObject, SAMLObj
 	}
 	
 	@Override
-	protected void doExecute(@Nonnull final ProfileRequestContext<SAMLObject, SAMLObject> profileRequestContext,
+	protected void doExecute(@Nonnull final ProfileRequestContext profileRequestContext,
 			@Nonnull final AuthenticationContext authenticationContext) {
 		logger.debug("{} Entering TokenValidator", getLogPrefix());		
 
@@ -91,13 +91,13 @@ public class TokenValidator extends AbstractValidationAction<SAMLObject, SAMLObj
 				return;
 			}
 				
-			handleError(profileRequestContext, authenticationContext, "InvalidCredentials",
+			handleError(profileRequestContext, authenticationContext, new LinotpLoginException("InvalidCredentials"),
 						AuthnEventIds.INVALID_CREDENTIALS);
 	
 		}		
 		catch (Exception e) {
 			logger.warn("{} Exception while validating token: {}", getLogPrefix(), e.getMessage());
-			handleError(profileRequestContext, authenticationContext, "AuthnException",
+			handleError(profileRequestContext, authenticationContext, new LinotpLoginException("GenericException"),
 					AuthnEventIds.AUTHN_EXCEPTION);
 		}
 	}
