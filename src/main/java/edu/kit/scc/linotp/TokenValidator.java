@@ -3,6 +3,10 @@ package edu.kit.scc.linotp;
 import javax.annotation.Nonnull;
 import javax.security.auth.Subject;
 
+import org.opensaml.profile.context.ProfileRequestContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import net.shibboleth.idp.authn.AbstractValidationAction;
 import net.shibboleth.idp.authn.AuthnEventIds;
 import net.shibboleth.idp.authn.context.AuthenticationContext;
@@ -12,11 +16,6 @@ import net.shibboleth.idp.session.context.SessionContext;
 import net.shibboleth.utilities.java.support.annotation.constraint.NotEmpty;
 import net.shibboleth.utilities.java.support.component.ComponentSupport;
 import net.shibboleth.utilities.java.support.primitive.StringSupport;
-
-import org.opensaml.profile.context.ProfileRequestContext;
-import org.opensaml.saml.common.SAMLObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class TokenValidator extends AbstractValidationAction {
 
@@ -91,13 +90,13 @@ public class TokenValidator extends AbstractValidationAction {
 				return;
 			}
 				
-			handleError(profileRequestContext, authenticationContext, new LinotpLoginException("InvalidCredentials"),
+			handleError(profileRequestContext, authenticationContext, "TokenWrong",
 						AuthnEventIds.INVALID_CREDENTIALS);
 	
 		}		
 		catch (Exception e) {
 			logger.warn("{} Exception while validating token: {}", getLogPrefix(), e.getMessage());
-			handleError(profileRequestContext, authenticationContext, new LinotpLoginException("GenericException"),
+			handleError(profileRequestContext, authenticationContext, e,
 					AuthnEventIds.AUTHN_EXCEPTION);
 		}
 	}

@@ -11,4 +11,16 @@
 	<!-- Names of form fields to pull tokenNumber -->
 	<bean id="shibboleth.authn.tokenCodeField" class="java.lang.String" c:_0="j_tokenNumber" />
 
+    <!--
+    Define entries here to map error messages detected by validation actions and classify them as particular
+    kinds of errors for use in your templates and as events in flows.
+    -->
+    <util:map id="shibboleth.authn.linotp.ClassifiedMessageMap">
+        <entry key="InvalidPassword">
+            <list>
+                <value>TokenWrong</value>
+            </list>
+        </entry>
+    </util:map>
+
 </beans>

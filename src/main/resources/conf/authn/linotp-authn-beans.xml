@@ -29,6 +29,7 @@
 
 	<bean id="LinotpTokenValidator" class="edu.kit.scc.linotp.TokenValidator" scope="prototype"
 		p:httpServletRequest-ref="shibboleth.HttpServletRequest"
+		p:classifiedMessages-ref="shibboleth.authn.linotp.ClassifiedMessageMap"
 		p:host="%{idp.authn.linotpHost:localhost}"
 		p:serviceUsername="%{idp.authn.linotpServiceuser:admin}"
 		p:servicePassword="%{idp.authn.linotpServicepassword:secret}"
