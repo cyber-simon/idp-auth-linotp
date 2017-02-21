@@ -10,8 +10,10 @@
         	<evaluate expression="TokenGenerator" />
             <evaluate expression="environment" result="viewScope.environment"/>
 			<evaluate expression="opensamlProfileRequestContext" result="viewScope.profileRequestContext" />
-			<evaluate expression="opensamlProfileRequestContext.getSubcontext(T(net.shibboleth.idp.authn.context.AuthenticationContext))"
-				result="viewScope.authenticationContext" />
+			<evaluate expression="opensamlProfileRequestContext.getSubcontext(T(net.shibboleth.idp.authn.context.AuthenticationContext))" result="viewScope.authenticationContext" />
+            <evaluate expression="authenticationContext.getSubcontext(T(net.shibboleth.idp.ui.context.RelyingPartyUIContext))" result="viewScope.rpUIContext" />
+            <evaluate expression="authenticationContext.getSubcontext(T(net.shibboleth.idp.authn.context.AuthenticationErrorContext))" result="viewScope.authenticationErrorContext" />
+            <evaluate expression="authenticationContext.getSubcontext(T(net.shibboleth.idp.authn.context.AuthenticationWarningContext))" result="viewScope.authenticationWarningContext" />
 			<evaluate expression="T(net.shibboleth.utilities.java.support.codec.HTMLEncoder)" result="viewScope.encoder" />
 			<evaluate expression="flowRequestContext.getExternalContext().getNativeRequest()" result="viewScope.request" />
 			<evaluate expression="flowRequestContext.getExternalContext().getNativeResponse()" result="viewScope.response" />
