@@ -7,8 +7,6 @@
 	<div class="text">
 
 	    <h1>#springMessageText("idp.login.2fa", "Token-basierter Login")</h1>
-	    
-        #parse("login-error.vm")
 
   		  #if ($tokenContext.getMessage())
 			<div>
@@ -17,6 +15,8 @@
 		  #end
 
            <form action="$flowExecutionUrl" autocomplete="off" method="post">
+
+	        #parse("login-error.vm")
 
 	  	    <div style="width: 260px; padding: 16px; border: 1px solid #b3b3b3;">
 			  <div style="position: relative; margin-top: 16px;">
