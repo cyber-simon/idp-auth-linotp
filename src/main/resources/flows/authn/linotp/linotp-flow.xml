@@ -5,8 +5,9 @@
 
     <var name="currentTime" class="java.util.Date" />
 
-    <view-state id="linotp" view="linotp">
-        <on-entry>
+    <view-state id="DisplayLinotpPage" view="linotp">
+        <on-render>
+	        <evaluate expression="SetRPUIInformation" />
         	<evaluate expression="TokenGenerator" />
             <evaluate expression="environment" result="viewScope.environment"/>
 			<evaluate expression="opensamlProfileRequestContext" result="viewScope.profileRequestContext" />
@@ -17,28 +18,29 @@
 			<evaluate expression="T(net.shibboleth.utilities.java.support.codec.HTMLEncoder)" result="viewScope.encoder" />
 			<evaluate expression="flowRequestContext.getExternalContext().getNativeRequest()" result="viewScope.request" />
 			<evaluate expression="flowRequestContext.getExternalContext().getNativeResponse()" result="viewScope.response" />
-        </on-entry>
-        <transition on="proceed" bind="true" validate="false" to="extractLinotpFromForm"/>
+        </on-render>
+        <transition on="proceed" to="ExtractLinotpFromForm"/>
     </view-state>
  
-	<action-state id="extractLinotpFromForm">
+	<action-state id="ExtractLinotpFromForm">
 		<evaluate expression="ExtractTokenFromForm" />
 		<evaluate expression="'proceed'" />
 
-		<transition on="InvalidCredentials" to="linotp" />
-		<transition on="proceed" to="validateLinotpResponse" />
+		<transition on="InvalidCredentials" to="DisplayLinotpPage" />
+		<transition on="proceed" to="ValidateLinotpResponse" />
 	</action-state>
  
-    <action-state id="validateLinotpResponse">
+    <action-state id="ValidateLinotpResponse">
         <evaluate expression="LinotpTokenValidator"/>
         <evaluate expression="'proceed'"/>
 		
-		<transition on="InvalidCredentials" to="linotp" />
-		<transition on="NoCredentials" to="linotp" />
 		<!-- At the moment user is redirected back to the totp form is he/she hasn't registered token -->
-		<transition on="AccountError" to="linotp" />
+		<transition on="AccountError" to="DisplayLinotpPage" />
 
         <transition on="proceed" to="proceed"/>        
+
+		<!-- On all errors, transition back to 2fa form -->
+		<transition to="DisplayLinotpPage" />
     </action-state>
     
 	<bean-import resource="../../../conf/authn/linotp-authn-beans.xml" />
