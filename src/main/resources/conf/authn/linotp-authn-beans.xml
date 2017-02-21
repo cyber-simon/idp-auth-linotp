@@ -34,4 +34,12 @@
 		p:servicePassword="%{idp.authn.linotpServicepassword:secret}"
 		p:checkCert="%{idp.authn.linotpCheckcert:true}" />
 
+    <bean id="SetRPUIInformation"
+            class="net.shibboleth.idp.ui.impl.SetRPUIInformation" scope="prototype"
+            p:httpServletRequest-ref="shibboleth.HttpServletRequest">
+        <property name="fallbackLanguages">
+            <bean parent="shibboleth.CommaDelimStringArray" c:_0="#{'%{idp.ui.fallbackLanguages:}'.trim()}" />
+        </property>
+    </bean>
+
 </beans>
