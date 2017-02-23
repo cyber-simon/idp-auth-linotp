@@ -21,6 +21,8 @@ public class LinotpTokenInfoDecoder {
 		token.setTokenDesc(JsonHelper.getStringOrNull(object, "LinOtp.TokenDesc"));
 		token.setSerial(JsonHelper.getStringOrNull(object, "LinOtp.TokenSerialnumber"));
 		token.setActive(JsonHelper.getBooleanOrNull(object, "LinOtp.Isactive"));
+		token.setFailCount(JsonHelper.getLongOrNull(object, "LinOtp.FailCount"));
+		token.setMaxFailCount(JsonHelper.getLongOrNull(object, "LinOtp.MaxFail"));
 		
 		return token;
 	}

@@ -7,6 +7,8 @@ public class LinotpTokenInfo {
 	private String tokenType;
 	private String tokenInfo;
 	private String tokenDesc;
+	private long failCount;
+	private long maxFailCount;
 	private boolean isActive;
 	
 	public long getTokenId() {
@@ -55,5 +57,21 @@ public class LinotpTokenInfo {
 
 	public void setSerial(String serial) {
 		this.serial = serial;
+	}
+
+	public long getFailCount() {
+		return failCount;
+	}
+
+	public void setFailCount(long failCount) {
+		this.failCount = failCount;
+	}
+
+	public long getMaxFailCount() {
+		return maxFailCount;
+	}
+
+	public void setMaxFailCount(long maxFailCount) {
+		this.maxFailCount = maxFailCount;
 	}
 }
