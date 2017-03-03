@@ -8,10 +8,12 @@ import net.shibboleth.idp.authn.context.AuthenticationContext;
 import net.shibboleth.idp.authn.context.SubjectContext;
 import net.shibboleth.idp.profile.AbstractProfileAction;
 import net.shibboleth.idp.session.context.SessionContext;
+import net.shibboleth.idp.session.context.navigate.CanonicalUsernameLookupStrategy;
 import net.shibboleth.utilities.java.support.annotation.constraint.NotEmpty;
 import net.shibboleth.utilities.java.support.component.ComponentInitializationException;
 import net.shibboleth.utilities.java.support.component.ComponentSupport;
 
+import com.google.common.base.Function;
 import org.opensaml.profile.context.ProfileRequestContext;
 import org.opensaml.saml.common.SAMLObject;
 import org.slf4j.Logger;
@@ -23,6 +25,7 @@ public class TokenGenerator extends AbstractProfileAction<SAMLObject, SAMLObject
 
 	protected TokenContext tokenCtx;
 	
+	private Function<ProfileRequestContext,String> usernameLookupStrategy;
 	protected String username;
 
 	private String host;
@@ -31,6 +34,10 @@ public class TokenGenerator extends AbstractProfileAction<SAMLObject, SAMLObject
 	private Boolean checkCert;
 	private Boolean createEmailToken;
 	
+	public TokenGenerator() {
+		usernameLookupStrategy = new CanonicalUsernameLookupStrategy();
+	}
+
     @Override
     protected void doInitialize() throws ComponentInitializationException {
         super.doInitialize();
@@ -54,20 +61,7 @@ public class TokenGenerator extends AbstractProfileAction<SAMLObject, SAMLObject
 			tokenCtx = profileRequestContext.getSubcontext(AuthenticationContext.class)
 					.getSubcontext(TokenContext.class, true);
 
-	        if (authenticationContext.getParent() != null) {
-		        SubjectContext subjectContext = authenticationContext.getParent().getSubcontext(SubjectContext.class);       
-		        if (subjectContext != null && subjectContext.getPrincipalName() != null) {
-		        	username = subjectContext.getPrincipalName();
-		        }
-		        else {
-		        	SessionContext sessionContext = authenticationContext.getParent().getSubcontext(SessionContext.class);
-		        	
-		        	if (sessionContext != null && sessionContext.getIdPSession() != null
-		        			&& sessionContext.getIdPSession().getPrincipalName() != null) {
-		        		username = sessionContext.getIdPSession().getPrincipalName();
-		        	}
-		        }
-	        }
+			username = usernameLookupStrategy.apply(profileRequestContext);
 
 	        if (username == null) {
 	        	logger.warn("{} No previous SubjectContext or Principal is set", getLogPrefix());

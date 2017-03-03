@@ -3,6 +3,7 @@ package edu.kit.scc.linotp;
 import javax.annotation.Nonnull;
 import javax.security.auth.Subject;
 
+import com.google.common.base.Function;
 import org.opensaml.profile.context.ProfileRequestContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +14,7 @@ import net.shibboleth.idp.authn.context.AuthenticationContext;
 import net.shibboleth.idp.authn.context.SubjectContext;
 import net.shibboleth.idp.authn.principal.UsernamePrincipal;
 import net.shibboleth.idp.session.context.SessionContext;
+import net.shibboleth.idp.session.context.navigate.CanonicalUsernameLookupStrategy;
 import net.shibboleth.utilities.java.support.annotation.constraint.NotEmpty;
 import net.shibboleth.utilities.java.support.component.ComponentSupport;
 import net.shibboleth.utilities.java.support.primitive.StringSupport;
@@ -20,14 +22,19 @@ import net.shibboleth.utilities.java.support.primitive.StringSupport;
 public class TokenValidator extends AbstractValidationAction {
 
 	private final Logger logger = LoggerFactory.getLogger(TokenValidator.class);
-	
+
+	private Function<ProfileRequestContext,String> usernameLookupStrategy;
 	private String username;
 	
 	private String host;
 	private String serviceUsername;
 	private String servicePassword;
 	private Boolean checkCert;
-	
+
+	public TokenValidator() {
+			usernameLookupStrategy = new CanonicalUsernameLookupStrategy();
+	}
+
     @Override
     protected boolean doPreExecute(
             @Nonnull ProfileRequestContext profileRequestContext,
@@ -36,20 +43,7 @@ public class TokenValidator extends AbstractValidationAction {
             return false;
         }
 
-        if (authenticationContext.getParent() != null) {
-	        SubjectContext subjectContext = authenticationContext.getParent().getSubcontext(SubjectContext.class);       
-	        if (subjectContext != null && subjectContext.getPrincipalName() != null) {
-	        	username = subjectContext.getPrincipalName();
-	        }
-	        else {
-	        	SessionContext sessionContext = authenticationContext.getParent().getSubcontext(SessionContext.class);
-	        	
-	        	if (sessionContext != null && sessionContext.getIdPSession() != null
-	        			&& sessionContext.getIdPSession().getPrincipalName() != null) {
-	        		username = sessionContext.getIdPSession().getPrincipalName();
-	        	}
-	        }
-        }
+		username = usernameLookupStrategy.apply(profileRequestContext);
 
         if (username == null) {
         	logger.warn("{} No previous SubjectContext or Principal is set", getLogPrefix());
