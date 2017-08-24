@@ -33,11 +33,11 @@
 
 	<bean id="TokenGenerator" class="edu.kit.scc.linotp.TokenGenerator" scope="prototype"
 		p:httpServletRequest-ref="shibboleth.HttpServletRequest"
-		p:host="%{idp.authn.linotpHost:localhost}"
-		p:serviceUsername="%{idp.authn.linotpServiceuser:admin}"
-		p:servicePassword="%{idp.authn.linotpServicepassword:secret}"
-		p:checkCert="%{idp.authn.linotpCheckcert:true}"
-		p:createEmailToken="%{idp.authn.linotpCreateEmailToken:false}" />
+		p:host="%{linotp.Host:localhost}"
+		p:serviceUsername="%{linotp.Serviceuser:admin}"
+		p:servicePassword="%{linotp.Servicepassword:secret}"
+		p:checkCert="%{linotp.Checkcert:true}"
+		p:createEmailToken="%{linotp.CreateEmailToken:false}" />
 
 	<bean id="ExtractTokenFromForm" class="edu.kit.scc.linotp.ExtractTokenFromForm" scope="prototype"
 		p:httpServletRequest-ref="shibboleth.HttpServletRequest" p:tokenCodeField-ref="shibboleth.authn.tokenCodeField" />
@@ -45,10 +45,10 @@
 	<bean id="LinotpTokenValidator" class="edu.kit.scc.linotp.TokenValidator" scope="prototype"
 		p:httpServletRequest-ref="shibboleth.HttpServletRequest"
 		p:classifiedMessages-ref="shibboleth.authn.linotp.ClassifiedMessageMap"
-		p:host="%{idp.authn.linotpHost:localhost}"
-		p:serviceUsername="%{idp.authn.linotpServiceuser:admin}"
-		p:servicePassword="%{idp.authn.linotpServicepassword:secret}"
-		p:checkCert="%{idp.authn.linotpCheckcert:true}" />
+		p:host="%{linotp.Host:localhost}"
+		p:serviceUsername="%{linotp.Serviceuser:admin}"
+		p:servicePassword="%{linotp.Servicepassword:secret}"
+		p:checkCert="%{linotp.Checkcert:true}" />
 
     <bean id="SetRPUIInformation"
             class="net.shibboleth.idp.ui.impl.SetRPUIInformation" scope="prototype"

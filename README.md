@@ -63,11 +63,11 @@ idp.authn.flows.initial = Password
 Also add the following configuration values:
 
 ```
-idp.authn.linotpHost = <your linotp host>
-idp.authn.linotpServiceuser = <service user>
-idp.authn.linotpServicepassword = <password>
-idp.authn.linotpCheckcert = <true: check DN of certificate match>
-idp.authn.linotpCreateEmailToken = <true: create an e-mail token, if user has no tokens yet (for testing)>
+linotp.Host = <your linotp host>
+linotp.Serviceuser = <service user>
+linotp.Servicepassword = <password>
+linotp.Checkcert = <true: check DN of certificate match>
+linotp.CreateEmailToken = <true: create an e-mail token, if user has no tokens yet (for testing)>
 ```
 
 You will most probably need to customize the `linotp.vm` view to reflect your IDP design.
