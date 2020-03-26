@@ -48,7 +48,9 @@ public class ExtractTokenFromForm extends AbstractExtractionAction<SAMLObject, S
 	}
 
 	public void setTokenCodeField(@Nonnull @NotEmpty final String fieldName) {
+		/* Commenting out field debug. This can exponse sensitive information (token codes and PINs) in the logs.
 		logger.debug("{} {} is tokencode field from the form", getLogPrefix(), fieldName);
+		*/
 		ComponentSupport.ifInitializedThrowUnmodifiabledComponentException(this);
 		tokenCodeField = fieldName;
 	}
@@ -78,7 +80,9 @@ public class ExtractTokenFromForm extends AbstractExtractionAction<SAMLObject, S
 				ActionSupport.buildEvent(profileRequestContext, AuthnEventIds.INVALID_CREDENTIALS);
 				return;
 			} else {
+				/* Commenting out token code log. This is too sensitive to log.
 				logger.debug("{} TokenCode: {}", getLogPrefix(), value);
+				*/
 
 				/** set tokencode to TokenCodeContext **/
 				tokenCtx.setToken(value);
