@@ -111,9 +111,11 @@ public class TokenGenerator extends AbstractProfileAction<SAMLObject, SAMLObject
 			}
 			
 			tokenCtx.setTokenList(tokenList);
-			
+
+			/* Commenting this out. It causes excess auth attempts, resulting in lockouts
 			connection.generateToken(tokenCtx);
-			
+			*/
+
 		} catch (Exception e) {
 			logger.debug("Failed to create new token", e);
 		}
