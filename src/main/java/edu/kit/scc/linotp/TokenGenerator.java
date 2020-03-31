@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright 2017 Michael Simon
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License.  You may obtain a copy
  * of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the
@@ -28,18 +28,18 @@ import net.shibboleth.utilities.java.support.annotation.constraint.NotEmpty;
 import net.shibboleth.utilities.java.support.component.ComponentInitializationException;
 import net.shibboleth.utilities.java.support.component.ComponentSupport;
 
-import com.google.common.base.Function;
+import java.util.function.Function;
 import org.opensaml.profile.context.ProfileRequestContext;
 import org.opensaml.saml.common.SAMLObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class TokenGenerator extends AbstractProfileAction<SAMLObject, SAMLObject> {
+public class TokenGenerator extends AbstractProfileAction {
 
 	private final Logger logger = LoggerFactory.getLogger(TokenGenerator.class);
 
 	protected TokenContext tokenCtx;
-	
+
 	private Function<ProfileRequestContext,String> usernameLookupStrategy;
 	protected String username;
 
@@ -48,7 +48,7 @@ public class TokenGenerator extends AbstractProfileAction<SAMLObject, SAMLObject
 	private String servicePassword;
 	private Boolean checkCert;
 	private Boolean createEmailToken;
-	
+
 	public TokenGenerator() {
 		usernameLookupStrategy = new CanonicalUsernameLookupStrategy();
 	}
@@ -57,9 +57,9 @@ public class TokenGenerator extends AbstractProfileAction<SAMLObject, SAMLObject
     protected void doInitialize() throws ComponentInitializationException {
         super.doInitialize();
     }
-    
+
 	@Override
-	protected boolean doPreExecute(ProfileRequestContext<SAMLObject, SAMLObject> profileRequestContext) {
+	protected boolean doPreExecute(ProfileRequestContext profileRequestContext) {
 		logger.debug("Entering GenerateNewToken doPreExecute");
 
         if (!super.doPreExecute(profileRequestContext)) {
@@ -72,7 +72,7 @@ public class TokenGenerator extends AbstractProfileAction<SAMLObject, SAMLObject
 	        	logger.warn("{} No AuthenticationContext is set", getLogPrefix());
 	        	return false;
 			}
-			
+
 			tokenCtx = profileRequestContext.getSubcontext(AuthenticationContext.class)
 					.getSubcontext(TokenContext.class, true);
 
@@ -82,26 +82,26 @@ public class TokenGenerator extends AbstractProfileAction<SAMLObject, SAMLObject
 	        	logger.warn("{} No previous SubjectContext or Principal is set", getLogPrefix());
 	        	return false;
 	        }
-			
+
 	    	logger.debug("{} PrincipalName from SubjectContext is {}", getLogPrefix(), username);
 	    	tokenCtx.setUsername(username);
-	    	
+
 			return true;
 		} catch (Exception e) {
 			logger.debug("Error with doPreExecute", e);
-			return false;		
+			return false;
 		}
-	}	
+	}
 
     @Override
-	protected void doExecute(@Nonnull final ProfileRequestContext<SAMLObject, SAMLObject> profileRequestContext) {
+	protected void doExecute(@Nonnull final ProfileRequestContext profileRequestContext) {
     	logger.debug("Entering GenerateNewToken doExecute");
-			
+
 		try {
 			LinotpConnection connection = new LinotpConnection(host, serviceUsername, servicePassword, checkCert);
 			connection.requestAdminSession();
 			List<LinotpTokenInfo> tokenList = connection.getTokenInfoList(username);
-			
+
 			if (createEmailToken && tokenList.size() == 0) {
 				List<LinotpUser> userList = connection.getUserList("userid", username);
 				if (userList.size() == 1) {
@@ -109,15 +109,17 @@ public class TokenGenerator extends AbstractProfileAction<SAMLObject, SAMLObject
 					tokenList = connection.getTokenInfoList(username);
 				}
 			}
-			
+
 			tokenCtx.setTokenList(tokenList);
-			
+
+			/* Commenting this out. It causes excess auth attempts, resulting in lockouts
 			connection.generateToken(tokenCtx);
-			
+			*/
+
 		} catch (Exception e) {
 			logger.debug("Failed to create new token", e);
 		}
-		
+
 	}
 
 	public void setHost(@Nonnull @NotEmpty final String fieldName) {

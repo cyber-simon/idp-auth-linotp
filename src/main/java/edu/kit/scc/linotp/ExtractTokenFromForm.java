@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright 2017 Michael Simon
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License.  You may obtain a copy
  * of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the
@@ -33,8 +33,8 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Strings;
 
-public class ExtractTokenFromForm extends AbstractExtractionAction<SAMLObject, SAMLObject> {
-	
+public class ExtractTokenFromForm extends AbstractExtractionAction {
+
 	/** Class logger. */
 	@Nonnull
 	private final Logger logger = LoggerFactory.getLogger(ExtractTokenFromForm.class);
@@ -48,16 +48,18 @@ public class ExtractTokenFromForm extends AbstractExtractionAction<SAMLObject, S
 	}
 
 	public void setTokenCodeField(@Nonnull @NotEmpty final String fieldName) {
+		/* Commenting out field debug. This can exponse sensitive information (token codes and PINs) in the logs.
 		logger.debug("{} {} is tokencode field from the form", getLogPrefix(), fieldName);
+		*/
 		ComponentSupport.ifInitializedThrowUnmodifiabledComponentException(this);
 		tokenCodeField = fieldName;
 	}
 
 
 	@Override
-	protected void doExecute(@Nonnull final ProfileRequestContext<SAMLObject, SAMLObject> profileRequestContext,
+	protected void doExecute(@Nonnull final ProfileRequestContext profileRequestContext,
 			@Nonnull final AuthenticationContext authenticationContext) {
-		
+
 		final HttpServletRequest request = getHttpServletRequest();
 
 		if (request == null) {
@@ -78,7 +80,9 @@ public class ExtractTokenFromForm extends AbstractExtractionAction<SAMLObject, S
 				ActionSupport.buildEvent(profileRequestContext, AuthnEventIds.INVALID_CREDENTIALS);
 				return;
 			} else {
+				/* Commenting out token code log. This is too sensitive to log.
 				logger.debug("{} TokenCode: {}", getLogPrefix(), value);
+				*/
 
 				/** set tokencode to TokenCodeContext **/
 				tokenCtx.setToken(value);
@@ -88,6 +92,6 @@ public class ExtractTokenFromForm extends AbstractExtractionAction<SAMLObject, S
 
 		} catch (Exception e) {
 			logger.warn("{} Login by {} produced exception", getLogPrefix(),  e);
-		}		
+		}
 	}
 }

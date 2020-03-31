@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright 2017 Michael Simon
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License.  You may obtain a copy
  * of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the
@@ -18,7 +18,7 @@ package edu.kit.scc.linotp;
 import javax.annotation.Nonnull;
 import javax.security.auth.Subject;
 
-import com.google.common.base.Function;
+import java.util.function.Function;
 import org.opensaml.profile.context.ProfileRequestContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,7 +40,7 @@ public class TokenValidator extends AbstractValidationAction {
 
 	private Function<ProfileRequestContext,String> usernameLookupStrategy;
 	private String username;
-	
+
 	private String host;
 	private String serviceUsername;
 	private String servicePassword;
@@ -65,14 +65,14 @@ public class TokenValidator extends AbstractValidationAction {
         	handleError(profileRequestContext, authenticationContext, "NoCredentials", AuthnEventIds.NO_CREDENTIALS);
         	return false;
         }
-        
+
     	logger.debug("{} PrincipalName from SubjectContext is {}", getLogPrefix(), username);
         return true;
     }
-	
+
 	@Override
 	protected Subject populateSubject(Subject subject) {
-		logger.debug("{} TokenValidator populateSubject is called", getLogPrefix());		
+		logger.debug("{} TokenValidator populateSubject is called", getLogPrefix());
 		if (StringSupport.trimOrNull(username) != null) {
 			logger.debug("{} Populate subject {}", getLogPrefix(), username);
 			subject.getPrincipals().add(new UsernamePrincipal(username));
@@ -80,11 +80,11 @@ public class TokenValidator extends AbstractValidationAction {
 		}
 		return null;
 	}
-	
+
 	@Override
 	protected void doExecute(@Nonnull final ProfileRequestContext profileRequestContext,
 			@Nonnull final AuthenticationContext authenticationContext) {
-		logger.debug("{} Entering TokenValidator", getLogPrefix());		
+		logger.debug("{} Entering TokenValidator", getLogPrefix());
 
 		TokenContext tokenCtx = authenticationContext.getSubcontext(TokenContext.class, true);
 
@@ -93,23 +93,23 @@ public class TokenValidator extends AbstractValidationAction {
 		try {
 			LinotpConnection connection = new LinotpConnection(host, serviceUsername, servicePassword, checkCert);
 			boolean login = connection.validateToken(tokenCtx);
-			
+
 			if (login == true) {
 				buildAuthenticationResult(profileRequestContext, authenticationContext);
 				return;
 			}
-				
+
 			handleError(profileRequestContext, authenticationContext, "TokenWrong",
 						AuthnEventIds.INVALID_CREDENTIALS);
-	
-		}		
+
+		}
 		catch (Exception e) {
 			logger.warn("{} Exception while validating token: {}", getLogPrefix(), e.getMessage());
 			handleError(profileRequestContext, authenticationContext, e,
 					AuthnEventIds.AUTHN_EXCEPTION);
 		}
 	}
-	
+
 	public void setHost(@Nonnull @NotEmpty final String fieldName) {
 		logger.debug("{} {} is tokencode field from the form", getLogPrefix(), fieldName);
 		ComponentSupport.ifInitializedThrowUnmodifiabledComponentException(this);
