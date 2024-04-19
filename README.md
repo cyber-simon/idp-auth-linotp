@@ -1,6 +1,6 @@
 # Shibboleth 2fa with LinOTP
 
-Library to integrate a step-up authentication via second factor for Shibboleth Identity Provider (IDP) version 3.
+Library to integrate a step-up authentication via second factor for Shibboleth Identity Provider (IDP) version 3. This is kind of discontinued. It works with IDP v4 and v5 with the branches idp-4 and idp-5. But is is not really supported and doesn't follow the new plugin/module architecture of the Shibboleth IDP. Only use, if you know what you are doing. If you are looking into implementing 2fa with shibboleth, please have a look at eduMFA (https://github.com/eduMFA/eduMFA) and the FUDISCR plugin (https://doku.tid.dfn.de/en:shibidp:plugin-fudiscr). These will be better maintained.
 
 ## Installation
 
