@@ -1,48 +1,69 @@
-#set ($rpContext = $profileRequestContext.getSubcontext('net.shibboleth.idp.profile.context.RelyingPartyContext'))
+#set ($rpContext = $profileRequestContext.getSubcontext('net.shibboleth.profile.context.RelyingPartyContext'))
 #set ($tokenContext = $authenticationContext.getSubcontext('edu.kit.scc.linotp.TokenContext', true))
 ##
 
 #parse("kit-header.vm")
 
-	<div class="text">
+<form action="$flowExecutionUrl" autocomplete="off" method="post" class="full content">
+    #parse("csrf/csrf.vm")
 
-	    <h1>#springMessageText("idp.login.2fa", "Token-basierter Login")</h1>
+	<div class="text full">
+		<h3>#springMessageText("idp.login.2fa", "Token-basierter Login")</h3>
+		
+		<div>
+			#springMessageText("idp.login.2fa_desc", "")
+		</div>
+	</div>
+	
+	#if ($tokenContext.getMessage())
+		<div class="full text">
+			$tokenContext.getMessage()
+		</div>
+	#end
+	
+	
+	<div class="form third" style="border: #bbbbbb 1px solid; padding: 0 1.5em 1.5em 1.5em;">
+		<div style="margin-top: 12px;">
+			<label for="tokenNumber">Token code:</label>
+	   		<input class="form-element form-field" id="j_tokenNumber" name="j_tokenNumber" type="text" autofocus />
+	    </div>
+	    <div style="margin-top: 12px;">
+	        <button class="form-element form-button" type="submit" name="_eventId_proceed"
+	              onClick="this.childNodes[0].nodeValue='#springMessageText("idp.login.pleasewait", "Logging in, please wait...")'"
+	              >#springMessageText("idp.login.login", "Login")</button>
+	    </div>
+	</div>
+	
+	<div class="text full">
+		<b>
+			#springMessageText("idp.login.tokenlist", "Registrierte Tokens für Account") $tokenContext.getUsername():
+		</b>
+	</div>
+	
+	<ul class="list full">
+	#foreach ($token in $tokenContext.getTokenList())
+	<li>
+	    #if ($token.getFailCount() >= $token.getMaxFailCount())
+	  	  <div>
+	  		<div style="color: gray;">$token.getTokenType() ($token.getSerial() - #springMessageText("idp.login.token_maxfail", "Zu viele Fehleingaben"))</div>
+	  	  </div>
+	    #elseif ($token.getTokenDesc().contains("BLOCKED"))
+	  	  <div>
+	  		<div style="color: gray;">$token.getTokenType() ($token.getSerial() - #springMessageText("idp.login.token_blocked", "Geblockt"))</div>
+	  	  </div>
+	    #elseif ($token.isActive())
+	  	  <div>
+	  		<div>$token.getTokenType() ($token.getSerial())</div>
+	  	  </div>
+	  	#else
+	  	  <div>
+	  		<div style="color: gray;">$token.getTokenType() ($token.getSerial() - #springMessageText("idp.login.token_deactivated", "Deaktiviert"))</div>
+	  	  </div>
+	  	#end
+	</li>
+	#end			
+	</ul>
 
-  		  #if ($tokenContext.getMessage())
-			<div>
-					$tokenContext.getMessage()
-			</div>
-		  #end
-
-           <form action="$flowExecutionUrl" autocomplete="off" method="post">
-
-	        #parse("login-error.vm")
-
-	  	    <div style="width: 260px; padding: 16px; border: 1px solid #b3b3b3;">
-			  <div style="position: relative; margin-top: 16px;">
-                <label for="tokenNumber">Token code ($tokenContext.getUsername())</label>
-                <input class="form-element form-field" id="j_tokenNumber" name="j_tokenNumber" type="text" autofocus />
-			  </div>
-			  
-       	      <div style="text-align: center; margin-top: 12px; padding-bottom: 8px;">
-                <button class="form-element form-button" type="submit" name="_eventId_proceed"
-                  onClick="this.childNodes[0].nodeValue='#springMessageText("idp.login.pleasewait", "Logging in, please wait...")'"
-                  >#springMessageText("idp.login.login", "Login")</button>
-			  </div>
-            </div>
-
-			<h2 style="margin-top: 16px;">#springMessageText("idp.login.tokenlist", "Registrierte Tokens"):</h2>
-
-			  #foreach ($token in $tokenContext.getTokenList())
-			    #if ($token.isActive())
-			  	  <div style="padding: 16px;">
-			  		<h3>#springMessageText("idp.login.token_$token.getTokenType()", $token.getTokenType()) ($token.getSerial())</h3>
-			  		<div>#springMessageText("idp.login.token_$token.getTokenType()_desc", "")</div>
-			  	  </div>
-			  	#end
-			  #end			
-			
-          </form>
-      </div>
+</form>
 
 #parse("kit-footer.vm")

@@ -16,22 +16,21 @@
 package edu.kit.scc.linotp;
 
 import javax.annotation.Nonnull;
-import javax.servlet.http.HttpServletRequest;
-
-import net.shibboleth.idp.authn.AbstractExtractionAction;
-import net.shibboleth.idp.authn.AuthnEventIds;
-import net.shibboleth.idp.authn.context.AuthenticationContext;
-import net.shibboleth.utilities.java.support.annotation.constraint.NotEmpty;
-import net.shibboleth.utilities.java.support.component.ComponentSupport;
-import net.shibboleth.utilities.java.support.primitive.StringSupport;
 
 import org.opensaml.profile.action.ActionSupport;
 import org.opensaml.profile.context.ProfileRequestContext;
-import org.opensaml.saml.common.SAMLObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Strings;
+
+import jakarta.servlet.http.HttpServletRequest;
+import net.shibboleth.idp.authn.AbstractExtractionAction;
+import net.shibboleth.idp.authn.AuthnEventIds;
+import net.shibboleth.idp.authn.context.AuthenticationContext;
+import net.shibboleth.shared.annotation.constraint.NotEmpty;
+import net.shibboleth.shared.component.ComponentSupport;
+import net.shibboleth.utilities.java.support.primitive.StringSupport;
 
 public class ExtractTokenFromForm extends AbstractExtractionAction {
 

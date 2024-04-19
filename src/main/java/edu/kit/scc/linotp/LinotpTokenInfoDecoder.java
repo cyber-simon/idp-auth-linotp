@@ -18,11 +18,11 @@ package edu.kit.scc.linotp;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.json.JsonArray;
-import javax.json.JsonObject;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import jakarta.json.JsonArray;
+import jakarta.json.JsonObject;
 
 public class LinotpTokenInfoDecoder {
 

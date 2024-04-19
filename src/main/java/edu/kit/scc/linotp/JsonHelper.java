@@ -15,7 +15,7 @@
  ******************************************************************************/
 package edu.kit.scc.linotp;
 
-import javax.json.JsonObject;
+import jakarta.json.JsonObject;
 
 public class JsonHelper {
 

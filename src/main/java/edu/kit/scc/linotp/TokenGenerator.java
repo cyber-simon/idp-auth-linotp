@@ -16,23 +16,20 @@
 package edu.kit.scc.linotp;
 
 import java.util.List;
+import java.util.function.Function;
 
 import javax.annotation.Nonnull;
 
-import net.shibboleth.idp.authn.context.AuthenticationContext;
-import net.shibboleth.idp.authn.context.SubjectContext;
-import net.shibboleth.idp.profile.AbstractProfileAction;
-import net.shibboleth.idp.session.context.SessionContext;
-import net.shibboleth.idp.session.context.navigate.CanonicalUsernameLookupStrategy;
-import net.shibboleth.utilities.java.support.annotation.constraint.NotEmpty;
-import net.shibboleth.utilities.java.support.component.ComponentInitializationException;
-import net.shibboleth.utilities.java.support.component.ComponentSupport;
-
-import java.util.function.Function;
 import org.opensaml.profile.context.ProfileRequestContext;
-import org.opensaml.saml.common.SAMLObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import net.shibboleth.idp.authn.context.AuthenticationContext;
+import net.shibboleth.idp.profile.AbstractProfileAction;
+import net.shibboleth.idp.session.context.navigate.CanonicalUsernameLookupStrategy;
+import net.shibboleth.shared.annotation.constraint.NotEmpty;
+import net.shibboleth.shared.component.ComponentInitializationException;
+import net.shibboleth.shared.component.ComponentSupport;
 
 public class TokenGenerator extends AbstractProfileAction {
 

@@ -32,7 +32,7 @@
 	<import resource="linotp-authn-config.xml" />
 
 	<bean id="TokenGenerator" class="edu.kit.scc.linotp.TokenGenerator" scope="prototype"
-		p:httpServletRequest-ref="shibboleth.HttpServletRequest"
+		p:httpServletRequestSupplier-ref="shibboleth.HttpServletRequestSupplier"
 		p:host="%{linotp.Host:localhost}"
 		p:serviceUsername="%{linotp.Serviceuser:admin}"
 		p:servicePassword="%{linotp.Servicepassword:secret}"
@@ -40,10 +40,11 @@
 		p:createEmailToken="%{linotp.CreateEmailToken:false}" />
 
 	<bean id="ExtractTokenFromForm" class="edu.kit.scc.linotp.ExtractTokenFromForm" scope="prototype"
-		p:httpServletRequest-ref="shibboleth.HttpServletRequest" p:tokenCodeField-ref="shibboleth.authn.tokenCodeField" />
+		p:httpServletRequestSupplier-ref="shibboleth.HttpServletRequestSupplier"
+		p:tokenCodeField-ref="shibboleth.authn.tokenCodeField" />
 
 	<bean id="LinotpTokenValidator" class="edu.kit.scc.linotp.TokenValidator" scope="prototype"
-		p:httpServletRequest-ref="shibboleth.HttpServletRequest"
+		p:httpServletRequestSupplier-ref="shibboleth.HttpServletRequestSupplier"
 		p:classifiedMessages-ref="shibboleth.authn.linotp.ClassifiedMessageMap"
 		p:host="%{linotp.Host:localhost}"
 		p:serviceUsername="%{linotp.Serviceuser:admin}"
@@ -52,7 +53,8 @@
 
     <bean id="SetRPUIInformation"
             class="net.shibboleth.idp.ui.impl.SetRPUIInformation" scope="prototype"
-            p:httpServletRequest-ref="shibboleth.HttpServletRequest">
+			p:httpServletRequestSupplier-ref="shibboleth.HttpServletRequestSupplier"
+            >
         <property name="fallbackLanguages">
             <bean parent="shibboleth.CommaDelimStringArray" c:_0="#{'%{idp.ui.fallbackLanguages:}'.trim()}" />
         </property>
